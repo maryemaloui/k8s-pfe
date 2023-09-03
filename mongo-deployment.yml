@@ -62,3 +62,43 @@ spec:
       - name: "mongo-data-dir"
         persistentVolumeClaim:
           claimName: "mongo-data"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: mongo
+  name: mongo-nodeport-svc
+spec:
+  ports:
+  - port: 27017
+    protocol: TCP
+    targetPort: 27017
+    nodePort: 32000
+  selector:
+    app: mongo
+  type: NodePort
+
+---
+apiVersion: v1
+data:
+  password: cGFzc3dvcmQxMjM= #password123
+  username: YWRtaW51c2Vy #adminuser
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: mongo-creds
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongo-data-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /data/mongo
