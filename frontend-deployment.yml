@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: maryemaloui/frontend-chatbot:latest
+        image: quay.io/maryemaloui/frontend-chatbot:latest
         ports:
         - containerPort: 80

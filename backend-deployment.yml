@@ -16,6 +16,9 @@ spec:
     spec:
       containers:
       - name: backend
-        image: maryemaloui/backend-chatbot:latest
+        image: quay.io/maryemaloui/backend-chatbot:latest
+        env:
+          - name: mongo_url
+            value: mongodb://mongodb-service:27017/backend
         ports:
         - containerPort: 80

@@ -19,6 +19,7 @@ spec:
           image: mongo
           ports:
             - containerPort: 27017
+          ServiceAccount: mongo
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
