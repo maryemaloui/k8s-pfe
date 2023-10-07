@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: maryemaloui/frontend-chatbot:latest
+          ports:
+            - containerPort: 3001
+          volumeMounts:
+            - name: frontend-storage
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: frontend-storage
+          persistentVolumeClaim:
+            claimName: frontend-pvc
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: frontend-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  hostPath:
+    path: /opt/dev/frontend
+---
+kind: PersistentVolumeClaim
+metadata:
+  name: frontend-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 1Gi
