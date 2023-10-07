@@ -18,4 +18,45 @@ spec:
       - name: rasa
         image: maryemaloui/rasa-chatbot:latest
         ports:
-        - containerPort: 80
+        - containerPort: 5005
+      volumeMounts:
+        - name: data-volume
+          mountPath: /app/data
+        - name: models-volume
+          mountPath: /app/models
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rasa
+spec:
+  selector:
+    app: rasa
+  ports:
+    - protocol: TCP
+      port: 5005  # Spécifiez le port 5005 ou un autre port valide ici
+      targetPort: 5005
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-volume
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /app/data
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: models-volume
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /app/models

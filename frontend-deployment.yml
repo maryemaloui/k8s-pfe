@@ -13,9 +13,59 @@ spec:
     metadata:
       labels:
         app: frontend
+    serviceAccountName: frontend-sa
     spec:
+      serviceAccountName: frontend-sa
       containers:
       - name: frontend
-        image: quay.io/maryemaloui/frontend-chatbot:latest
+        image: maryemaloui/frontend-chatbot:latest
         ports:
         - containerPort: 80
+        env:
+        - name: urladmin
+          value: http://backend.apps-crc.testing/admins
+        - name: urlchat
+          value: http://backend.apps-crc.testing/chats
+        - name: urlcertif
+          value: http://backend.apps-crc.testing/certifs
+        - name: socketUrl
+          value: http://rasa.apps-crc.testing:5005
+        volumeMounts:
+        - name: volume-frontend
+          mountPath: /usr/share/nginx/html
+          subPath: html
+        #- name: volume-
+        #  mountPath: /etc/nginx/nginx.conf
+         # subPath: nginx.conf
+      volumes:
+      - name: volume-frontend
+        persistentVolumeClaim:
+         claimName: frontend
+
+
+    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3001
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: volume-frontend
+# spec:
+#   serviceAccountName: frontend-sa
+#   capacity:
+#     storage: 1Gi 
+#   accessModes:
+#     - ReadWriteOnce 
+#   hostPath:
+#     path: /usr/share/nginx/html
