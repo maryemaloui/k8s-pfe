@@ -34,34 +34,7 @@ spec:
         - name: frontend-storage
           persistentVolumeClaim:
             claimName: frontend-pvc
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: frontend-pv
-spec:
-  serviceAccountName: frontend-sa
-  capacity:
-    storage: 1Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: standard
-  hostPath:
-    path: /opt/dev/frontend
----
-kind: PersistentVolumeClaim
-metadata:
-  name: frontend-pvc
-spec:
-  serviceAccountName: frontend-sa
-  accessModes:
-    - ReadWriteMany
-  storageClassName: standard
-  resources:
-    requests:
-      storage: 1Gi
+
 ---
 apiVersion: v1
 kind: Service
