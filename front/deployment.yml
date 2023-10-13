@@ -16,8 +16,9 @@ spec:
       containers:
         - name: frontend
           image: maryemaloui/frontend-chatbot:latest
+          imagePullPolicy: Always  
           ports:
-            - containerPort: 3001
+            - containerPort: 80
           env:
           - name: urladmin
             value: http://backend.apps-crc.testing/admins
@@ -26,7 +27,7 @@ spec:
           - name: urlcertif
             value: http://backend.apps-crc.testing/certifs
           - name: socketUrl
-            value: http://rasa.apps-crc.testing:5005
+            value: http://rasa.apps-crc.testing
           volumeMounts:
             - name: frontend-storage
               mountPath: /usr/share/nginx/html
@@ -45,5 +46,5 @@ spec:
     app: frontend
   ports:
     - protocol: TCP
-      port: 3001
-      targetPort: 3001
+      port: 80
+      targetPort: 80
